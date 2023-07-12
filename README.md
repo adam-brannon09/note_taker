@@ -1,2 +1,1 @@
-# note_taker
-A simple note taking application
+# Note Taker Starter Code
