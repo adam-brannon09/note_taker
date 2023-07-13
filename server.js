@@ -2,12 +2,11 @@
 const express = require('express');
 const app = express();
 
-//Import Path
+//File System and Path modules
 const fs = require('fs');
 const path = require('path');
 //Set up the paths and store in variables for easier to read syntax
 const notePath = path.join(__dirname, './db/db.json');
-
 
 //Designate The Port
 const PORT = process.env.PORT || 3001;
@@ -17,15 +16,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 
-//API Routes
+//HTML ROUTES//
+
 //GET Route that takes you to index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, './public/index.html'))
 });
+
 //GET Route that takes you to notes.html
 app.get('/notes', (req, res) => {
     res.sendFile(path.join(__dirname, './public/notes.html'))
 });
+
+//API ROUTES//
 
 // GET Route that reads the db.json file and returns all saved notes from the db
 app.get('/api/notes/', (req, res) => {
@@ -46,6 +49,7 @@ app.post('/api/notes', (req, res) => {
     fs.readFile(notePath, 'utf8', (err, data) => {
         if (err) throw err;
         const notes = JSON.parse(data);
+        //.push() adds the new note to the bottom of the notes array
         notes.push(newNote);
         fs.writeFile(notePath, JSON.stringify(notes), (err) => {
             if (err) throw err;
@@ -54,14 +58,28 @@ app.post('/api/notes', (req, res) => {
     });
 });
 
+//Delete route that deletes the note with the specified id
+app.delete('/api/notes/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    fs.readFile(notePath, 'utf8', (err, data) => {
+        if (err) throw err;
+        //The notes variable cant be const because we are reassigning it. I found this out the hard way.
+        let notes = JSON.parse(data);
+        notes = notes.filter(note => note.id !== id);
+        fs.writeFile(notePath, JSON.stringify(notes), (err) => {
+            if (err) throw err;
+            res.json(notes);
+        });
+    });
+});
 
-
-
-
-
-
-
-
+//GET Route that takes you to index.html
+/* The code will first match the '*' wildcard character to the path that is requested by the client.
+ If the path matches the * wildcard character, the code will then send the index.html file to the client.
+ This also has to be the last route listed or else it breaks the code. I also found this out the hard way*/
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'))
+});
 
 //Start the server on port 3001
 app.listen(PORT, () => console.log(`Note Taker app listening on port ${PORT}!`))
