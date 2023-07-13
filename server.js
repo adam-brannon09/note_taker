@@ -1,7 +1,7 @@
 //Import Express then Initiate It
 const express = require('express');
 const app = express();
-
+const htmlRoutes = require('./routes/htmlRoutes');
 //File System and Path modules
 const fs = require('fs');
 const path = require('path');
@@ -18,18 +18,19 @@ const PORT = process.env.PORT || 3001;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
+// app.use('/', htmlRoutes);
 
 //HTML ROUTES//
 
-//GET Route that takes you to index.html
-app.get('/', (req, res) => {
-    res.sendFile(indexPage)
-});
+// //GET Route that takes you to index.html
+// app.get('/', (req, res) => {
+//     res.sendFile(indexPage)
+// });
 
-//GET Route that takes you to notes.html
-app.get('/notes', (req, res) => {
-    res.sendFile(notesPage)
-});
+// //GET Route that takes you to notes.html
+// app.get('/notes', (req, res) => {
+//     res.sendFile(notesPage)
+// });
 
 //API ROUTES//
 
