@@ -1,11 +1,14 @@
-//Import Express
+//Import Express then Initiate It
 const express = require('express');
 const app = express();
 
 //File System and Path modules
 const fs = require('fs');
 const path = require('path');
+
 //Set up the paths and store in variables for easier to read syntax
+const indexPage = path.join(__dirname, './public/index.html');
+const notesPage = path.join(__dirname, './public/notes.html');
 const notePath = path.join(__dirname, './db/db.json');
 
 //Designate The Port
@@ -20,18 +23,18 @@ app.use(express.static('public'));
 
 //GET Route that takes you to index.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, './public/index.html'))
+    res.sendFile(indexPage)
 });
 
 //GET Route that takes you to notes.html
 app.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, './public/notes.html'))
+    res.sendFile(notesPage)
 });
 
 //API ROUTES//
 
 // GET Route that reads the db.json file and returns all saved notes from the db
-app.get('/api/notes/', (req, res) => {
+app.get('/api/notes', (req, res) => {
     fs.readFile(notePath, 'utf8', (err, data) => {
         if (err) throw err;
         const notes = JSON.parse(data);
@@ -45,7 +48,7 @@ app.post('/api/notes', (req, res) => {
     //Get the info from the request body
     const newNote = req.body;
     //Add a unique id to the note
-    newNote.id = Math.floor(Math.random() * 1000);
+    newNote.id = Math.floor(Math.random() * 10000);
     fs.readFile(notePath, 'utf8', (err, data) => {
         if (err) throw err;
         const notes = JSON.parse(data);
@@ -78,8 +81,8 @@ app.delete('/api/notes/:id', (req, res) => {
  If the path matches the * wildcard character, the code will then send the index.html file to the client.
  This also has to be the last route listed or else it breaks the code. I also found this out the hard way*/
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, './public/index.html'))
+    res.sendFile(indexPage)
 });
 
 //Start the server on port 3001
-app.listen(PORT, () => console.log(`Note Taker app listening on port ${PORT}!`))
+app.listen(PORT, () => console.log(`Note Taker App listening on port ${PORT}!`))
