@@ -10,7 +10,7 @@
 
 # Note Taker Application
 
-Welcome to the Note Taker Application App! This user-friendly application is designed to take user input and save notes that can be deleted when they are no longer needed.
+Welcome to the Note Taker App! This user-friendly application is designed to take user input and save notes that can be edited as necessary or deleted when they are no longer needed.
 
 <img src='./public/assets/images/note-taker-gif.gif'>
 
@@ -20,6 +20,7 @@ Welcome to the Note Taker Application App! This user-friendly application is des
 - Revisit previous notes by clicking on the title of the note you wish to view.
 
 [Try it out here!](https://pure-plateau-06759-17795068f1d2.herokuapp.com/)
+
 ## Contributors
 Adam Brannon
 
